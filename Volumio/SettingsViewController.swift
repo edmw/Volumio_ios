@@ -54,11 +54,8 @@ class SettingsViewController: FormViewController {
             +++ Section(localizedDebugSectionTitle)
             <<< ButtonRow(localizedChangePlayerTitle) {
                 $0.title = $0.tag
-                }.onCellSelection{ [weak self] (cell, row) in
-                    // FIXME: handling of default should be centralized (move to manager?)
-                    Defaults.remove(.selectedPlayer)
-                    let controller = self?.storyboard?.instantiateViewController(withIdentifier: "SearchingViewController") as! SearchVolumioViewController
-                    self?.present(controller, animated: true, completion: nil)
+                }.onCellSelection{ (cell, row) in
+                    VolumioIOManager.shared.disconnect(unsetDefault: true)
             }
             <<< ButtonRow(localizedClearCacheTitle) {
                 $0.title = $0.tag

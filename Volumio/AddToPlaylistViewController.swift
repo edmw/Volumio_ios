@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PlaylistAddViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
+class AddToPlaylistViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     var playlists : [Any] = []

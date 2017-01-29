@@ -28,16 +28,19 @@ class SearchVolumioViewController: UIViewController, UITableViewDelegate, UITabl
         
         let logo = UIImage(named: "logo")
         let imageView = UIImageView(image:logo)
-        self.navigationItem.titleView = imageView
+        navigationItem.titleView = imageView
         
-        VolumioIOManager.shared.closeConnection()
-
         searchResultTable.delegate = self
         searchResultTable.dataSource = self
         searchResultTable.tableFooterView = UIView(frame: CGRect.zero)
 
         browser.delegate = self
         browserStartSearch()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        clearAllNotice()
     }
 
     @IBAction func refreshBrowser(_ sender: UIBarButtonItem) {
@@ -129,9 +132,7 @@ class SearchVolumioViewController: UIViewController, UITableViewDelegate, UITabl
         let player = Player(name: name, host: host, port: port)
         VolumioIOManager.shared.connect(to: player, setDefault: true)
         
-        if let top = UIApplication.shared.keyWindow?.rootViewController {
-            top.dismiss(animated: true, completion: nil)
-        }
+        dismiss(animated: true, completion: nil)
     }
     
 }

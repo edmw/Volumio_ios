@@ -8,23 +8,17 @@
 
 import UIKit
 
-class BrowseSourcesTableViewController: UITableViewController {
+class BrowseSourcesTableViewController: VolumioTableViewController {
     
     var sourcesList : [SourceObject] = []
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        VolumioIOManager.shared.browseSources()
-        registerObservers()
-    }
+    // MARK: - View Callbacks
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         localize()
 
-        pleaseWait()
-        
         tableView.tableFooterView = UIView(frame: CGRect.zero)
         
         refreshControl?.addTarget(self,
@@ -33,23 +27,29 @@ class BrowseSourcesTableViewController: UITableViewController {
         )
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        registerObserver(forName: .browseSources) { (notification) in
+            self.updateSources(notification: notification)
+        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        VolumioIOManager.shared.browseSources()
+        
+        super.viewDidAppear(animated)
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         clearAllNotice()
-        
-        NotificationCenter.default.removeObserver(self)
     }
     
-    private func registerObservers() {
-        NotificationCenter.default.addObserver(self,
-            selector: #selector(updateSources(notification:)),
-            name: .browseSources,
-            object: nil
-        )
-    }
+    // MARK: -
     
-    func updateSources(notification: NSNotification) {
+    func updateSources(notification: Notification) {
         guard let sources = notification.object as? [SourceObject] else { return }
         
         sourcesList = sources
