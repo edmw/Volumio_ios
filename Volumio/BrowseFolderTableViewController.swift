@@ -33,12 +33,6 @@ class BrowseFolderTableViewController: UITableViewController,
 //        }
 //    }
 	
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        VolumioIOManager.shared.browseLibrary(uri: serviceUri)
-        registerObservers()
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -64,6 +58,22 @@ class BrowseFolderTableViewController: UITableViewController,
         playlistHeaderView?.delegate = self
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        VolumioIOManager.shared.browseLibrary(uri: serviceUri)
+
+        registerObservers()
+
+        super.viewWillAppear(animated)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        if !VolumioIOManager.shared.isConnected && !VolumioIOManager.shared.isConnecting {
+            _ = navigationController?.popToRootViewController(animated: animated)
+        }
+        
+        super.viewDidAppear(animated)
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         

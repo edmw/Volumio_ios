@@ -13,11 +13,8 @@ class BrowseSearchTableViewController: UITableViewController, UISearchBarDelegat
     @IBOutlet weak var searchBar: UISearchBar!
     
     var sourcesList : [SearchResultObject] = []
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        registerObservers()
-    }
+
+    // MARK: - View Callbacks
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +31,20 @@ class BrowseSearchTableViewController: UITableViewController, UISearchBarDelegat
         )
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        registerObservers()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        if !VolumioIOManager.shared.isConnected && !VolumioIOManager.shared.isConnecting {
+            _ = navigationController?.popToRootViewController(animated: animated)
+        }
+        
+        super.viewDidAppear(animated)
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         

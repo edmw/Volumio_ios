@@ -7,15 +7,13 @@
 //
 
 import UIKit
+
 import Eureka
 import Kingfisher
 
-class SettingsViewController: FormViewController {
+class SettingsViewController: VolumioFormViewController {
     
-    override func viewDidAppear(_ animated: Bool) {
-        clearAllNotice()
-    }
-    
+    // MARK: - View Callbacks
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -36,14 +34,7 @@ class SettingsViewController: FormViewController {
                         else { return }
                     UIApplication.shared.open(playerURL, options: [:], completionHandler: nil)
                 }
-            
-//            <<< ButtonRow("Network") { (row: ButtonRow) -> Void in
-//                row.title = row.tag
-//                row.presentationMode = .segueName(segueName: "networkSettings", onDismiss: nil)
-//                }.cellSetup { cell, row in
-//                    cell.imageView?.image = UIImage(named: "network")
-//            }
-            
+
             +++ Section("")
             <<< ButtonRow(localizedShutdownOptionsTitle) {
                 $0.title = $0.tag
@@ -64,9 +55,17 @@ class SettingsViewController: FormViewController {
             }
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        clearAllNotice()
+        
+        super.viewDidAppear(animated)
+    }
+    
+    // MARK: -
+    
     func clearImageCache() {
-        ImageCache.default.calculateDiskCacheSize { size in
-            print("Used disk size by bytes: \(size/1000000)")
+        ImageCache.default.calculateDiskCacheSize { (size) in
+            Log.info("Used disk cache size by bytes: \(size / 1000000)")
             
             ImageCache.default.clearDiskCache(completion: { (data) in
                 ImageCache.default.clearMemoryCache()

@@ -7,9 +7,12 @@
 //
 
 import UIKit
-import Kingfisher
-import Fabric
 
+import Kingfisher
+
+/**
+ Controller for queue table view. Inherits automatic connection handling from `VolumioTableViewController`.
+ */
 class QueueTableViewController: VolumioTableViewController, QueueActionsDelegate {
     
     var queue : [TrackObject] = []
@@ -49,6 +52,8 @@ class QueueTableViewController: VolumioTableViewController, QueueActionsDelegate
         registerObserver(forName: .removedfromQueue) { (notification) in
             self.removeFromQueue(notification: notification)
         }
+        
+        pleaseWait()
     }
     
     override func viewWillDisappear(_ animated: Bool) {

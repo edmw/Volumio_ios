@@ -1,5 +1,5 @@
 //
-//  VolumioViewController.swift
+//  VolumioFormViewController.swift
 //  Volumio
 //
 //  Created by Michael Baumgärtner on 29.01.17.
@@ -8,10 +8,12 @@
 
 import UIKit
 
-class VolumioViewController: UIViewController, VolumioController, ObservesNotifications {
+import Eureka
+
+class VolumioFormViewController: FormViewController, VolumioController, ObservesNotifications {
     
     var observers: [AnyObject] = []
-
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -22,7 +24,7 @@ class VolumioViewController: UIViewController, VolumioController, ObservesNotifi
             self.volumioDisconnected()
         }
     }
-
+    
     override func viewDidAppear(_ animated: Bool) {
         connectToVolumio()
         

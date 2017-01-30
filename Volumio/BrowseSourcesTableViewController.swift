@@ -8,6 +8,9 @@
 
 import UIKit
 
+/**
+ Controller for browse sources table view. Inherits automatic connection handling from `VolumioTableViewController`.
+ */
 class BrowseSourcesTableViewController: VolumioTableViewController {
     
     var sourcesList : [SourceObject] = []
@@ -31,8 +34,15 @@ class BrowseSourcesTableViewController: VolumioTableViewController {
         super.viewWillAppear(animated)
         
         registerObserver(forName: .browseSources) { (notification) in
-            self.updateSources(notification: notification)
+            self.clearAllNotice()
+            
+            guard let sources = notification.object as? [SourceObject]
+                else { return }
+            self.sourcesList = sources
+            self.updateSources()
         }
+        
+        pleaseWait()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -47,14 +57,10 @@ class BrowseSourcesTableViewController: VolumioTableViewController {
         clearAllNotice()
     }
     
-    // MARK: -
+    // MARK: - View Update
     
-    func updateSources(notification: Notification) {
-        guard let sources = notification.object as? [SourceObject] else { return }
-        
-        sourcesList = sources
+    func updateSources() {
         tableView.reloadData()
-        clearAllNotice()
     }
 
     // MARK: - Table view data source
@@ -81,6 +87,7 @@ class BrowseSourcesTableViewController: VolumioTableViewController {
     
     func handleRefresh(refreshControl: UIRefreshControl) {
         VolumioIOManager.shared.browseSources()
+
         refreshControl.endRefreshing()
     }
     

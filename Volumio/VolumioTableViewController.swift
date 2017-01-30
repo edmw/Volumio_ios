@@ -35,18 +35,4 @@ class VolumioTableViewController: UITableViewController, VolumioController, Obse
         super.viewDidDisappear(animated)
     }
     
-    // MARK: - Volumio Callbacks
-    
-    func volumioConnected() {
-        Log.info("Volumio connected")
-    }
-    
-    func volumioDisconnected() {
-        Log.info("Volumio disconnected")
-        
-        let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let controller = storyboard.instantiateViewController(withIdentifier: "SearchingViewController") as! SearchVolumioViewController
-        present(controller, animated: true, completion: nil)
-    }
-    
 }

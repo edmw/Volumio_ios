@@ -10,6 +10,9 @@ import UIKit
 
 import Dropper
 
+/**
+ Controller for playback view. Inherits automatic connection handling from `VolumioViewController`.
+ */
 class PlaybackViewController: VolumioViewController {
     
     // information block
@@ -98,6 +101,8 @@ class PlaybackViewController: VolumioViewController {
                 autoClearTime: 3
             )
         }
+        
+        pleaseWait()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
