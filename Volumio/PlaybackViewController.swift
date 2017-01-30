@@ -179,7 +179,11 @@ class PlaybackViewController: VolumioViewController {
     
     @discardableResult
     func updatePlaybackControls(for track: TrackObject?) -> Bool {
-        guard let track = track else { return false }
+        guard let track = track
+            else {
+                stopTimer()
+                return false
+            }
 
         if let status = track.status {
             switch status {
@@ -259,12 +263,9 @@ class PlaybackViewController: VolumioViewController {
         currentProgress.setProgress(percentage, animated: true)
     }
     
-    func sliderValueDidChanged(slider: UISlider) {
-        print(slider.value)
-    }
+    // MARK: - View Actions
     
     @IBAction func pressPlay(_ sender: UIButton) {
-        
         if let currentTrackInfo = VolumioIOManager.shared.currentTrack {
             switch currentTrackInfo.status! {
             case "play":
@@ -347,6 +348,16 @@ class PlaybackViewController: VolumioViewController {
             dropper.hideWithAnimation(0.1)
         }
     }
+    
+    // MARK: - Volumio Events
+    
+    override func volumioDisconnected() {
+        super.volumioDisconnected()
+        
+        currentTrack = nil
+        update()
+    }
+
 }
 
 extension PlaybackViewController: DropperDelegate {

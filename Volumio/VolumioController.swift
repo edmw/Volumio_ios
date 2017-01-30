@@ -14,7 +14,7 @@ protocol VolumioController {
     func volumioDisconnected()
 }
 
-extension VolumioController where Self: UIViewController {
+extension VolumioController where Self: UIViewController, Self: ObservesNotifications {
     
     /// Connects to volumio if there is no connection yet or tries to get current state otherwise.
     func connectToVolumio() {
@@ -26,13 +26,32 @@ extension VolumioController where Self: UIViewController {
         }
     }
     
-    // MARK: - Volumio Callbacks
+    // MARK: - View Callbacks (default implementations)
     
-    func volumioConnected() {
+    func _viewWillAppear() {
+        registerObserver(forName: .connected) { (notification) in
+            self.volumioConnected()
+        }
+        registerObserver(forName: .disconnected) { (notification) in
+            self.volumioDisconnected()
+        }
+    }
+
+    func _viewDidAppear() {
+        connectToVolumio()
+    }
+
+    func _viewDidDisappear() {
+        unregisterObservers()        
+    }
+    
+    // MARK: - Volumio Callbacks (default implementations)
+    
+    func _volumioConnected() {
         Log.entry(self, message: "Volumio connected")
     }
     
-    func volumioDisconnected() {
+    func _volumioDisconnected() {
         Log.entry(self, message: "Volumio disconnected")
         
         let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
